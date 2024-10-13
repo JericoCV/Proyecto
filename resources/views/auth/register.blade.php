@@ -38,12 +38,12 @@
 
             <x-input-error :messages="$errors->get('password_confirmation')" class="mt-2" />
         </div>
-        <div class="mb-3">
+        <div class="mt-4">
             <label for="role" class="form-label">Role</label>
-            <select name="role_id" class="form-control" required>
+            <select name="role_id" class="block mt-1 w-full" required>
                 <option value="1">Administrador</option>
                 <option value="2">Docente</option>
-                <option value="3">Alumno</option>
+                <option value="3">Estudiante</option>
             </select>
         </div>
 

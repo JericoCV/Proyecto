@@ -32,9 +32,11 @@ Route::get('/dashboard', function () {
 /*Admin route*/
 use App\Http\Controllers\AdminController;
 use App\Http\Middleware\AdminMiddleware;
+use App\Http\Controllers\PageController;
 
 Route::middleware(['auth', AdminMiddleware::class])->group(function () {
     Route::get('/admin', [AdminController::class, 'index'])->name('admin.dashboard');
+    Route::resource('pages', PageController::class)->except(['index', 'show']);;
 });
 
 /*Teacher route*/
@@ -63,4 +65,12 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/profile/destroy', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
+
+
+
+/********************PUBLIC ROUTES*******************/
+
 Route::get('/', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+Route::get('/pages', [PageController::class, 'index'])->name('pages.index');
+Route::get('/pages/{page}/show', [PageController::class, 'show'])->name('pages.show');
+

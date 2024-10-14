@@ -13,6 +13,9 @@
                     <h1>Admin Dashboard</h1>
                     <p>Bienvenido, Administrador.</p>
                 </div>
+                <div class="options p-6 text-gray-900">
+                    <a href="{{route('pages.index')}}">Pages</a>
+                </div>
             </div>
         </div>
     </div>

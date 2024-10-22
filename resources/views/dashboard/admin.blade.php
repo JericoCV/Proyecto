@@ -11,7 +11,7 @@
                 <div class="p-6 text-gray-900">
                     {{ __("You're logged in!") }}
                     <h1>Admin Dashboard</h1>
-                    <p>Bienvenido, Administrador.</p>
+                    <p>Bienvenido, Administrador. {{Illuminate\Support\Facades\Auth::user()->name}}</p>
                 </div>
                 <div class="options p-6 text-gray-900">
                     <a href="{{route('pages.index')}}">Pages</a>

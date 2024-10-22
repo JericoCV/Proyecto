@@ -16,7 +16,8 @@ return new class extends Migration
             $table->string('type');
             $table->text('content');
             $table->integer('order');
-            $table->string('style')->nullable();
+            $table->json('style')->nullable();
+            $table->string('image_path')->nullable();
             $table->foreignId('section_id')->constrained('sections')->onDelete('cascade');
             $table->timestamps();
         });

@@ -9,7 +9,7 @@ class Element extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['type', 'content', 'order', 'style', 'section_id'];
+    protected $fillable = ['type', 'content', 'order', 'style', 'section_id', 'image_path'];
 
     public function section()
     {

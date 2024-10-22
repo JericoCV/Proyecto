@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
+
 use App\Models\Page;
 use Illuminate\Http\Request;
 
@@ -50,8 +51,16 @@ class PageController extends Controller
      */
     public function show(Page $page)
     {
+        // Obtener el menú relacionado con la página, si existe
+        $menu = $page->menus()->first(); // Esto asume que tienes una relación definida en el modelo Page
+        $templates = TemplateController::getAllTemplates();
         // Retornar la vista para mostrar una página específica
-        return view('pages.show', compact('page'));
+        if ($menu) {
+            return view('pages.show', compact('page', 'menu', 'templates'));
+        }
+
+        // Solo devolver la página si no hay menú
+        return view('pages.show', compact('page', 'templates'));
     }
 
     /**
@@ -68,8 +77,8 @@ class PageController extends Controller
      */
     public function update(Request $request, Page $page)
     {
-         // Validar la solicitud
-         $request->validate([
+        // Validar la solicitud
+        $request->validate([
             'title' => 'required|string|max:255',
             'content' => 'required|string',
             'creation_date' => 'nullable|date',
@@ -80,7 +89,6 @@ class PageController extends Controller
         $page->update($request->all());
         // Redirigir a la lista de páginas con un mensaje de éxito
         return redirect()->route('pages.index')->with('success', 'Page updated successfully.');
-    
     }
 
     /**
@@ -88,6 +96,10 @@ class PageController extends Controller
      */
     public function destroy(Page $page)
     {
+        foreach ($page->sections as $section) {
+            // Si el elemento tiene una imagen, eliminarla del disco
+            SectionController::destroySectionbyId($section->id);
+        }
         // Eliminar la página
         $page->delete();
         // Redirigir a la lista de páginas con un mensaje de éxito

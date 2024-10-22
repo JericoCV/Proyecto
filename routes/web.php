@@ -31,12 +31,23 @@ Route::get('/dashboard', function () {
 
 /*Admin route*/
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\ElementController;
 use App\Http\Middleware\AdminMiddleware;
 use App\Http\Controllers\PageController;
+use App\Http\Controllers\MenuController;
+use App\Http\Controllers\ItemController;
+use App\Http\Controllers\SectionController;
+use App\Http\Controllers\TemplateController;
 
 Route::middleware(['auth', AdminMiddleware::class])->group(function () {
     Route::get('/admin', [AdminController::class, 'index'])->name('admin.dashboard');
-    Route::resource('pages', PageController::class)->except(['index', 'show']);;
+    Route::resource('pages', PageController::class);
+    Route::resource('pages.menus', MenuController::class); 
+    Route::resource('pages.menus.items', ItemController::class);
+    Route::resource('pages.sections', SectionController::class);
+    Route::get('/pages/{page}/sections/{section}', [SectionController::class, 'ShowElements'])->name('pages.sections.manageElements');
+    Route::resource('pages.sections.elements', ElementController::class);
+    Route::post('/pages/{page}/add-template', [TemplateController::class, 'addTemplateToPage'])->name('pages.addTemplate');
 });
 
 /*Teacher route*/
@@ -71,6 +82,4 @@ Route::middleware(['auth'])->group(function () {
 /********************PUBLIC ROUTES*******************/
 
 Route::get('/', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
-Route::get('/pages', [PageController::class, 'index'])->name('pages.index');
-Route::get('/pages/{page}/show', [PageController::class, 'show'])->name('pages.show');
 

@@ -3,62 +3,78 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Page;
+use App\Models\Section;
+use App\Models\Template;
 
 class TemplateController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
+    public function addTemplateToPage(Request $request, $page_id)
     {
-        //
+        $page = Page::findOrFail($page_id);
+        $template = Template::findOrFail($request->template_id);
+        switch ($template->name) {
+            case 'Comunicados':
+                $this->createComunicadoSections($page);
+                break;
+            case 'Noticias':
+                $this->createNoticiasSections($page);
+                break;
+            case 'Galerías':
+                $this->createGaleriaSections($page);
+                break;
+        }
+
+        return redirect()->route('pages.show', $page_id)->with('success', 'Template added to the page successfully!');
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
+    private function createComunicadoSections(Page $page)
     {
-        //
+        // Crear una sección de texto para comunicados
+        Section::create([
+            'title' => 'Comunicado',
+            'order' => Section::where('page_id', $page->id)->max('order') + 1,
+            'page_id' => $page->id,
+        ]);
+
+        // Crear un menú para comunicados
+        Section::create([
+            'title' => 'Enlaces del Comunicado',
+            'order' => Section::where('page_id', $page->id)->max('order') + 1,
+            'page_id' => $page->id,
+        ]);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
+    private function createNoticiasSections(Page $page)
     {
-        //
+        // Crear una sección de texto para noticias
+        Section::create([
+            'title' => 'Noticia',
+            'order' => Section::where('page_id', $page->id)->max('order') + 1,
+            'page_id' => $page->id,
+        ]);
+
+        // Crear una sección de imagen para noticias
+        Section::create([
+            'title' => 'Imagen de la Noticia',
+            'order' => Section::where('page_id', $page->id)->max('order') + 1,
+            'page_id' => $page->id,
+        ]);
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
+    private function createGaleriaSections(Page $page)
     {
-        //
+        // Crear una sección para la galería de imágenes
+        Section::create([
+            'title' => 'Galería de Imágenes',
+            'order' => Section::where('page_id', $page->id)->max('order') + 1,
+            'page_id' => $page->id,
+        ]);
     }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
+    
+    public static function getAllTemplates()
     {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
+        return Template::all();
     }
 }
+

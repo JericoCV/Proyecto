@@ -2,63 +2,27 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Item;
+use App\Models\Menu;
 use Illuminate\Http\Request;
 
 class ItemController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
+    public function store($itemData, $menu_id)
     {
-        //
+        // Crear un nuevo ítem
+        Item::create([
+            'text' => $itemData['text'],
+            'link' => $itemData['link'],
+            'order' => $itemData['order'] ?? 0, // Si no se envía un orden, usar 0
+            'menu_id' => $menu_id
+        ]);
     }
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
+    public function destroy($page_id, $menu_id, $id)
     {
-        //
-    }
+        $item = Item::findOrFail($id);
+        $item->delete();
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
+        return redirect()->route('pages.menus.index', [$page_id, $menu_id])->with('success', 'Item deleted successfully!');
     }
 }

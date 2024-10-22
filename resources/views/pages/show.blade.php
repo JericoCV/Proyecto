@@ -21,10 +21,57 @@
                         <p><strong>Administrator ID:</strong> {{ $page->Administrator_id }}</p>
 
                         <a href="{{ route('pages.index') }}" class="btn btn-secondary">Back to Pages</a>
-                        <a href="{{ route('pages.edit', $page->id) }}" class="btn btn-primary">Edit Page</a>
+                        @if (isset($menu))
+                        <a href="{{ route('pages.menus.index', [$page->id, $menu->id]) }}"
+                            class="btn btn-primary">Manage
+                            Menu</a>
+                        @else
+                        <a href="{{ route('pages.menus.create', $page->id) }}" class="btn btn-primary">New Menu</a>
+                        @endif
+                        <a href="{{ route('pages.sections.index', $page->id) }}" class="btn btn-primary">Manage
+                            Sections</a>
+                        <h1>Manage Templates</h1>
+
+                        <!-- Botón para mostrar el formulario -->
+                        <button id="add-template-btn" class="btn btn-primary">Add Template</button>
+                        <button id="cancel-template-btn" class="btn btn-secondary"
+                            style="display: none;">Cancel</button>
+
+                        <form action="{{ route('pages.addTemplate', ['page' => $page->id]) }}" method="POST"
+                            id="template-form" style="display: none;">
+                            @csrf
+                            <div class="form-group">
+                                <label for="template">Select Template:</label>
+                                <select name="template_id" id="template" class="form-control" required>
+                                    @foreach($templates as $template)
+                                    <option value="{{ $template->id }}">{{ $template->name }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <button type="submit">Add Template</button>
+                        </form>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+    <script>
+        document.getElementById('add-template-btn').addEventListener('click', function() {
+            // Mostrar el formulario y el botón de cancelar
+            document.getElementById('template-form').style.display = 'block';
+            document.getElementById('cancel-template-btn').style.display = 'inline-block';
+
+            // Ocultar el botón de agregar plantilla
+            this.style.display = 'none';
+        });
+
+        document.getElementById('cancel-template-btn').addEventListener('click', function() {
+            // Ocultar el formulario y el botón de cancelar
+            document.getElementById('template-form').style.display = 'none';
+            this.style.display = 'none';
+
+            // Volver a mostrar el botón de agregar plantilla
+            document.getElementById('add-template-btn').style.display = 'inline-block';
+        });
+    </script>
 </x-app-layout>

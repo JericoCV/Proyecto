@@ -52,4 +52,11 @@ class User extends Authenticatable
     {
         return $this->belongsTo(Role::class, 'role_id');
     }
+
+     // Función estática para obtener el rol de un usuario
+     public static function getUserRole($userId)
+     {
+         $user = self::find($userId);
+         return $user ? $user->role->role_name : null; // Devuelve el nombre del rol o null si no se encuentra el usuario
+     }
 }

@@ -12,6 +12,7 @@
                     {{ __("You're logged in!") }}
                     <h1>Teacher Dashboard</h1>
                     <p>Bienvenido, Docente.</p>
+                    <a href="{{ route('courses.myCourses') }}">My Courses</a>
                 </div>
             </div>
         </div>

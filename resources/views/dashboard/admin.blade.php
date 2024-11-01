@@ -14,7 +14,10 @@
                     <p>Bienvenido, Administrador. {{Illuminate\Support\Facades\Auth::user()->name}}</p>
                 </div>
                 <div class="options p-6 text-gray-900">
-                    <a href="{{route('pages.index')}}">Pages</a>
+                    <a href="{{route('pages.index')}}">Pages</a><br>
+                    <a href="{{route('users.index')}}">Usuarios</a><br>
+                    <a href="{{route('courses.index')}}">Courses</a><br>
+                    <a href="{{route('moderations.index')}}">Archive Moderations </a>
                 </div>
             </div>
         </div>

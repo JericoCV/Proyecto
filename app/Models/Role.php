@@ -14,7 +14,7 @@ class Role extends Model
 
     // Campos que pueden ser asignados en masa
     protected $fillable = [
-        'rol_name',  // Nombre del rol
+        'role_name',  // Nombre del rol
     ];
 
     /**

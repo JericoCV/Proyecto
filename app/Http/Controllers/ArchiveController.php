@@ -103,4 +103,12 @@ class ArchiveController extends Controller
         $archives = Archive::where('course_id', $course_id)->get();
         return $archives;
     }
+
+    public static function getArchivesByCourseIdForStudents($course_id){
+        $archives = Archive::where('course_id', $course_id)->where('approved', true)->get();
+        return $archives;
+    }
+
+
+    
 }

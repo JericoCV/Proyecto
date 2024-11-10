@@ -28,6 +28,7 @@ class StudentController extends Controller
     // Muestra las actividades de un curso específico para el estudiante
     public function activities($course_id)
     {
+        $archives = ArchiveController::getArchivesByCourseIdForStudents($course_id);
         $course = Course::with([
             'activities' => function($query) {
                 $query->orderBy('created_at', 'desc');
@@ -38,7 +39,7 @@ class StudentController extends Controller
             }
         ])->findOrFail($course_id);
         
-        return view('students.activities', compact('course'));
+        return view('students.activities')->with(compact('course', 'archives'));
     }
 
     public static function getStudentByUserId($id){

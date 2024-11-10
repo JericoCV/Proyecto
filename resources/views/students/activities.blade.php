@@ -2,7 +2,7 @@
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Actividades del Curso') }}
+            {{ __($course->name) }}
         </h2>
     </x-slot>
 
@@ -33,6 +33,25 @@
                             @endforeach
                         </tbody>
                     </table>
+                    <h3 class="text-lg font-bold mb-4">Archivos del Curso</h3>
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Nombre</th>
+                                <th>Subido por</th>
+                                <th>Fecha de Subida</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach($archives as $archive)
+                                <tr>
+                                    <td><a href="{{ asset('storage/' . $archive->path) }}" target="_blank">{{ $archive->name }}</a></td>
+                                    <td>{{ $archive->mail }}</td>
+                                    <td>{{ \Carbon\Carbon::parse($archive->upload_date)->format('d-m-Y') }}</td>
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table><br>
                 </div>
             </div>
         </div>

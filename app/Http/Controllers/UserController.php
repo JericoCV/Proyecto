@@ -59,4 +59,9 @@ class UserController extends Controller
         $roleName = User::getUserRole($userId);
         return $roleName;
     }
+
+    public static function getUserNameById($id){
+        $user = User::findOrFail($id);
+        return $user;
+    }
 }

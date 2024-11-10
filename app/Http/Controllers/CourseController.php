@@ -8,6 +8,7 @@ use App\Models\User;
 use App\Models\Student;
 use Illuminate\Http\Request;
 use App\Http\Controllers\ArchiveController;
+use App\Http\Controllers\ActivityController;
 
 class CourseController extends Controller
 {
@@ -92,7 +93,10 @@ class CourseController extends Controller
         // Limpia los estudiantes actuales y asigna los nuevos
         Student::where('course_id', $course_id)->delete();
         foreach ($studentIds as $studentId) {
+            $name = UserController::getUserNameById($studentId);
             Student::create([
+                'name' => 'Estudiante',
+                'fullname'=> $name->name,
                 'student_id' => $studentId,
                 'course_id' => $course_id,
             ]);
@@ -119,7 +123,14 @@ class CourseController extends Controller
     
         $course = Course::where('teacher_id',$user->id)->where('id',$course_id)->first();
         $archives = ArchiveController::getArchivesByCourseId($course_id);
+        $activities = ActivityController::getActivitieByCoursId($course_id);
+
         //  dd($course);
-        return view('courses.my-course')->with(compact('course','archives'));
+        return view('courses.my-course')->with(compact('course','archives', 'activities'));
+    }
+     
+    public static function getCourseById($id){
+        $course = Course::findOrFail($id);
+        return $course;
     }
 }

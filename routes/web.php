@@ -72,6 +72,8 @@ Route::middleware(['auth', AdminMiddleware::class])->group(function () {
 use App\Http\Middleware\TeacherMiddleware;
 use App\Http\Controllers\TeacherController;
 use App\Http\Controllers\ArchiveController;
+use App\Http\Controllers\GradeController;
+use App\Http\Controllers\ActivityController;
 
 Route::middleware(['auth', TeacherMiddleware::class])->group(function () {
     Route::get('/teacher', [TeacherController::class, 'index'])->name('teacher.dashboard');
@@ -81,6 +83,14 @@ Route::middleware(['auth', TeacherMiddleware::class])->group(function () {
     Route::get('courses/{course}/archives/create', [ArchiveController::class, 'create'])->name('courses.archives.create');
     Route::post('courses/{course}/archives', [ArchiveController::class, 'store'])->name('courses.archives.store');
     Route::delete('courses/{course}/archives/{archive}', [ArchiveController::class, 'destroy'])->name('courses.archives.destroy');
+    Route::get('/courses/{course}/activities', [ActivityController::class, 'index'])->name('courses.activities.index');
+    Route::get('/courses/{course}/activities/create', [ActivityController::class, 'create'])->name('activities.create');
+    Route::post('/courses/{course}/activities', [ActivityController::class, 'store'])->name('activities.store');
+    Route::get('/courses/{course}/activities/{activity}/edit', [ActivityController::class, 'edit'])->name('activities.edit');
+    Route::put('/courses/{course}/activities/{activity}', [ActivityController::class, 'update'])->name('activities.update');
+    Route::delete('/courses/{course}/activities/{activity}', [ActivityController::class, 'destroy'])->name('activities.destroy');
+    Route::get('/courses/{course}/activities/{activity}/grades', [GradeController::class, 'show'])->name('activities.grades.show');
+    Route::post('/courses/{course}/activities/{activity}/grades', [GradeController::class, 'update'])->name('grades.update');
 });
 
 /*Student route*/
@@ -90,6 +100,8 @@ use App\Http\Controllers\StudentController;
 
 Route::middleware(['auth', StudentMiddleware::class])->group(function () {
     Route::get('/student', [StudentController::class, 'index'])->name('student.dashboard');
+    Route::get('/student/courses', [StudentController::class, 'courses'])->name('student.courses');
+    Route::get('/student/courses/{course}/activities', [StudentController::class, 'activities'])->name('student.activities');
 });
 
 /***************ACCOUNTS SETTINGS****************/

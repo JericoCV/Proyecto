@@ -1,7 +1,7 @@
 <x-app-layout>
     <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Create Element') }}
+        <h2 class="font-semibold text-xl text-white leading-tight">
+            {{ __('Nuevo Elemento') }}
         </h2>
     </x-slot>
 
@@ -10,107 +10,114 @@
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 text-gray-900">
                     <div class="container">
-                        <h1>Create New Element</h1>
-
+                        <h1 class="text-2xl font-semibold mb-6">Crear Nuevo Elemento</h1>
+    
                         <form action="{{ route('pages.sections.elements.store', [$page_id, $section_id]) }}" method="POST" id="element-form" enctype="multipart/form-data">
                             @csrf
-
-                            <div class="form-group">
-                                <label for="type">Element Type:</label>
-                                <select name="type" id="type" class="form-control" required>
-                                    <option value="">Select Type</option>
-                                    <option value="text">Text</option>
-                                    <option value="image">Image</option>
+    
+                            <div class="mb-4">
+                                <label for="type" class="block text-sm font-medium text-gray-700">Tipo de Elemento:</label>
+                                <select name="type" id="type" class="form-control w-full mt-2 px-4 py-2 border rounded-lg" required>
+                                    <option value="">Seleccionar</option>
+                                    <option value="text">Texto</option>
+                                    <option value="image">Imagen</option>
                                     <!-- Add more options as needed -->
                                 </select>
                             </div>
-
-                            <div id="text-form" class="element-specific-form" style="display:none;">
-                                <div class="form-group">
-                                    <label for="text_content">Content:</label>
-                                    <textarea name="content" id="text_content" class="form-control" required></textarea>
+    
+                            <div id="text-form" class="element-specific-form hidden">
+                                <div class="mb-4">
+                                    <label for="text_content" class="block text-sm font-medium text-gray-700">Contenido:</label>
+                                    <textarea name="content" id="text_content" class="form-control w-full mt-2 px-4 py-2 border rounded-lg" required></textarea>
                                 </div>
-                                <div class="form-group">
-                                    <label for="text_style">Style:</label>
-                                    <select name="style" id="text_style" class="form-control">
-                                        <option value="">Select Style</option>
-                                        <option value="bold">Bold</option>
-                                        <option value="italic">Italic</option>
-                                        <option value="underline">Underline</option>
+                                <div class="mb-4">
+                                    <label for="text_style" class="block text-sm font-medium text-gray-700">Estilo:</label>
+                                    <select name="style" id="text_style" class="form-control w-full mt-2 px-4 py-2 border rounded-lg">
+                                        <option value="">Seleccionar estilo de texto</option>
+                                        <option value="bold">Negrita</option>
+                                        <option value="italic">Cursiva</option>
+                                        <option value="underline">Subrayado</option>
                                         <!-- Add more styles as needed -->
                                     </select>
                                 </div>
                             </div>
-
-                            <div id="image-form" class="element-specific-form" style="display:none;">
-                                <div class="form-group">
-                                    <label for="image">Image:</label>
-                                    <input type="file" name="image" id="image" class="form-control" accept="image/*" required>
+    
+                            <div id="image-form" class="element-specific-form hidden">
+                                <div class="mb-4">
+                                    <label for="image" class="block text-sm font-medium text-gray-700">Imagen:</label>
+                                    <input type="file" name="image" id="image" class="form-control w-full mt-2 px-4 py-2 border rounded-lg" accept="image/*" required>
                                 </div>
-                                <div class="form-group">
-                                    <label for="image_content">Alt Text:</label>
-                                    <input type="text" name="alt_text" id="image_content" class="form-control" required>
+                                <div class="mb-4">
+                                    <label for="image_content" class="block text-sm font-medium text-gray-700">Alt Text:</label>
+                                    <input type="text" name="alt_text" id="image_content" class="form-control w-full mt-2 px-4 py-2 border rounded-lg" required>
                                 </div>
-                                <div class="form-group">
-                                    <label for="image_style">Style:</label>
-                                    <select name="style" id="image_style" class="form-control">
-                                        <option value="">Select Style</option>
-                                        <option value="responsive">Responsive</option>
-                                        <option value="center">Center</option>
+                                <div class="mb-4">
+                                    <label for="image_style" class="block text-sm font-medium text-gray-700">Alineacion:</label>
+                                    <select name="style" id="image_style" class="form-control w-full mt-2 px-4 py-2 border rounded-lg">
+                                        <option value="">Seleccionar</option>
+                                        <option value="responsive">Responsivo</option>
+                                        <option value="center">Centro</option>
                                         <!-- Add more styles as needed -->
                                     </select>
                                 </div>
                             </div>
-
-                            <button type="submit" class="btn btn-primary">Create Element</button>
+    
+                            <button type="submit" class="mt-4 bg-blue-500 text-white px-6 py-2 rounded-lg hover:bg-blue-600">Create Element</button>
                         </form>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+    
+    <!-- Error and Success Messages -->
     @if ($errors->any())
-    <div class="alert alert-danger">
-        <ul>
-            @foreach ($errors->all() as $error)
-                <li>{{ $error }}</li>
-            @endforeach
-        </ul>
-    </div>
-@endif
-
-@if (session('success'))
-    <div class="alert alert-success">
-        {{ session('success') }}
-    </div>
-@endif
+        <div class="mt-4 p-4 bg-red-500 text-white rounded-lg">
+            <ul>
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+    @endif
+    
+    @if (session('success'))
+        <div class="mt-4 p-4 bg-green-500 text-white rounded-lg">
+            {{ session('success') }}
+        </div>
+    @endif
+    
     <script>
         document.getElementById('type').addEventListener('change', function() {
             const selectedType = this.value;
-            document.querySelectorAll('.element-specific-form').forEach(form => {
-                form.style.display = 'none'; // Hide all specific forms
-                // Reset required attribute
-                const textContentField = document.getElementById('text_content');
-                const imageField = document.getElementById('image');
-                const imageContentField = document.getElementById('image_content');
-
-                if (textContentField) textContentField.removeAttribute('required');
-                if (imageField) imageField.removeAttribute('required');
-                if (imageContentField) imageContentField.removeAttribute('required');
-            });
-
+            const forms = document.querySelectorAll('.element-specific-form');
+            
+            // Hide all specific forms
+            forms.forEach(form => form.classList.add('hidden'));
+    
+            // Reset required attribute
+            const textContentField = document.getElementById('text_content');
+            const imageField = document.getElementById('image');
+            const imageContentField = document.getElementById('image_content');
+    
+            if (textContentField) textContentField.removeAttribute('required');
+            if (imageField) imageField.removeAttribute('required');
+            if (imageContentField) imageContentField.removeAttribute('required');
+    
+            // Show the specific form based on selection
             if (selectedType) {
                 const selectedForm = document.getElementById(`${selectedType}-form`);
-                selectedForm.style.display = 'block'; // Show the selected form
-
+                selectedForm.classList.remove('hidden'); // Show the selected form
+    
                 // Set the required attribute only for visible fields
                 if (selectedType === 'text') {
-                    document.getElementById('text_content').setAttribute('required', 'required');
+                    textContentField.setAttribute('required', 'required');
                 } else if (selectedType === 'image') {
-                    document.getElementById('image').setAttribute('required', 'required');
-                    document.getElementById('image_content').setAttribute('required', 'required');
+                    imageField.setAttribute('required', 'required');
+                    imageContentField.setAttribute('required', 'required');
                 }
             }
         });
     </script>
+    
 </x-app-layout>

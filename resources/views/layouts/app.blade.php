@@ -14,22 +14,24 @@
         <!-- Scripts -->
         @vite(['resources/css/app.css', 'resources/js/app.js'])
     </head>
-    <body class="font-sans antialiased">
-        <div class="min-h-screen bg-gray-100">
+    <body class="font-sans antialiased bg-white">
+        <div class="min-h-screen">
             @include('layouts.navigation')
 
             <!-- Page Heading -->
             @isset($header)
-                <header class="bg-white shadow">
+                <header class="bg-blue-700 shadow text-white">
                     <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
-                        {{ $header }}
+                        <h2 class="text-xl font-semibold leading-tight">{{ $header }}</h2>
                     </div>
                 </header>
             @endisset
 
             <!-- Page Content -->
-            <main>
-                {{ $slot }}
+            <main class="bg-gray-100 min-h-screen p-4">
+                <div class="max-w-7xl mx-auto bg-white shadow-lg rounded-lg p-6">
+                    {{ $slot }}
+                </div>
             </main>
         </div>
     </body>

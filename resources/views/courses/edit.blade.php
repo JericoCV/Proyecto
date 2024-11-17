@@ -1,7 +1,7 @@
 <x-app-layout>
     <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Dashboard') }}
+        <h2 class="font-semibold text-xl text-white leading-tight">
+            {{ __('Detalles del Curso') }}
         </h2>
     </x-slot>
 
@@ -9,12 +9,12 @@
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 text-gray-900">
-
+    
                     <div class="container">
-                        <h1>Editar Curso</h1>
+                        <h1 class="text-3xl font-bold mb-6">Editar Curso</h1>
                     
                         @if ($errors->any())
-                            <div class="alert alert-danger">
+                            <div class="bg-red-100 text-red-700 border-l-4 border-red-500 p-4 mb-4">
                                 <ul>
                                     @foreach ($errors->all() as $error)
                                         <li>{{ $error }}</li>
@@ -23,24 +23,29 @@
                             </div>
                         @endif
                     
-                        <form action="{{ route('courses.update', $course->id) }}" method="POST">
+                        <form action="{{ route('courses.update', $course->id) }}" method="POST" class="space-y-6">
                             @csrf
                             @method('PUT')
-                            <div class="form-group">
-                                <label for="name">Nombre del curso</label>
-                                <input type="text" name="name" id="name" class="form-control" value="{{ $course->name }}" required>
+    
+                            <div>
+                                <label for="name" class="block text-lg font-medium text-gray-700">Nombre del curso</label>
+                                <input type="text" name="name" id="name" class="mt-2 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 p-2" value="{{ $course->name }}" required>
                             </div>
-                            <div class="form-group">
-                                <label for="level">Nivel</label>
-                                <select name="level" id="level"class="form-control" required>
-                                    <option value="basico" {{ $course->level == 'basico' ? 'selected' : '' }}>Basic</option>
-                                    <option value="intermedio" {{ $course->level == 'intermedio' ? 'selected' : '' }}>Intermediate</option>
-                                    <option value="avanzado" {{ $course->level == 'avanzado' ? 'selected' : '' }}>Advanced</option>
+    
+                            <div>
+                                <label for="level" class="block text-lg font-medium text-gray-700">Nivel</label>
+                                <select name="level" id="level" class="mt-2 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 p-2" required>
+                                    <option value="basico" {{ $course->level == 'basico' ? 'selected' : '' }}>Básico</option>
+                                    <option value="pre-intermedio" {{ $course->level == 'pre-intermedio' ? 'selected' : '' }}>Pre-Intermedio</option>
+                                    <option value="intermedio" {{ $course->level == 'intermedio' ? 'selected' : '' }}>Intermedio</option>
+                                    <option value="intermedio-alto" {{ $course->level == 'intermedio-alto' ? 'selected' : '' }}>Intermedio Alto</option>
+                                    <option value="avanzado" {{ $course->level == 'avanzado' ? 'selected' : '' }}>Avanzado</option>
                                 </select>
                             </div>
-                            <div class="form-group">
-                                <label for="teacher_id">Profesor</label>
-                                <select name="teacher_id" id="teacher_id" class="form-control">
+    
+                            <div>
+                                <label for="teacher_id" class="block text-lg font-medium text-gray-700">Profesor</label>
+                                <select name="teacher_id" id="teacher_id" class="mt-2 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 p-2">
                                     @foreach($teachers as $teacher)
                                         <option value="{{ $teacher->id }}" {{ $teacher->id == $course->teacher_id ? 'selected' : '' }}>
                                             {{ $teacher->name }}
@@ -48,13 +53,21 @@
                                     @endforeach
                                 </select>
                             </div>
-                            <button type="submit" class="btn btn-primary">Actualizar</button>
-                            <a href="{{ route('courses.index') }}" class="btn btn-secondary">Cancelar</a>
+    
+                            <div class="flex items-center justify-end space-x-4">
+                                <button type="submit" class="px-6 py-2 bg-blue-600 text-white font-semibold rounded-md shadow-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                    Actualizar
+                                </button>
+                                <a href="{{ route('courses.index') }}" class="px-6 py-2 bg-gray-500 text-white font-semibold rounded-md shadow-md hover:bg-gray-500 focus:outline-none focus:ring-2 focus:ring-gray-500">
+                                    Cancelar
+                                </a>
+                            </div>
                         </form>
                     </div>
-
+    
                 </div>
             </div>
         </div>
     </div>
+    
 </x-app-layout>

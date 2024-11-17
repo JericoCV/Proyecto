@@ -42,6 +42,7 @@ use App\Http\Controllers\TemplateController;
 use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\CourseController;
 use App\Http\Controllers\ModerationController;
+use App\Http\Controllers\PageSectionElementController;
 
 Route::middleware(['auth', AdminMiddleware::class])->group(function () {
     Route::get('/admin', [AdminController::class, 'index'])->name('admin.dashboard');
@@ -65,6 +66,9 @@ Route::middleware(['auth', AdminMiddleware::class])->group(function () {
     Route::get('/moderations/{id}', [ModerationController::class, 'show'])->name('moderations.show');
     Route::put('/moderations/{id}', [ModerationController::class, 'update'])->name('moderations.update');
     Route::delete('/moderations/{id}', [ModerationController::class, 'destroy'])->name('moderations.destroy');
+    // Ruta para actualizar el orden de los elementos
+    Route::post('/pages/sections/{sectionId}/elements/{elementId}/update-order', [PageSectionElementController::class, 'updateOrder'])->name('pages.sections.elements.updateOrder');
+
 });
 
 /*Teacher route*/

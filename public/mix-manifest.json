@@ -1,0 +1,4 @@
+{
+    "/css/app.css": "/css/app.css?id=abc123",
+    "/js/app.js": "/js/app.js?id=xyz456"
+}

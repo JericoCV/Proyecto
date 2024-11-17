@@ -35,32 +35,45 @@ class UserController extends Controller
 
     public function update(Request $request, $id)
     {
-        $user = User::findOrfail($id);
+        // Buscar el usuario por ID
+        $user = User::findOrFail($id);
+
+        // Validación de los campos
         $request->validate([
             'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:'.User::class],
-            'password' => ['required', 'confirmed', Rules\Password::defaults()],
+            'email' => ['required', 'string', 'lowercase', 'email', 'max:255'],
+            // Validación para la contraseña solo si está presente
+            'password' => ['nullable', 'confirmed', Rules\Password::defaults()],
         ]);
+
+        // Actualizar los datos del usuario
         $user->update([
             'name' => $request->name,
             'email' => $request->email,
-            'password' => Hash::make($request->password),
+            // Si se proporciona una nueva contraseña, actualizarla
+            'password' => $request->password ? Hash::make($request->password) : $user->password,
         ]);
-        return redirect()->route('users.index');
+
+        // Redirigir a la lista de usuarios con un mensaje de éxito
+        return redirect()->route('users.index')->with('success', 'User updated successfully.');
     }
 
-    public function destroy($id){
+
+    public function destroy($id)
+    {
         $user = User::findOrfail($id);
         $user->delete();
         return redirect()->route('users.index');
     }
 
-    public static function getUserRole($userId){
+    public static function getUserRole($userId)
+    {
         $roleName = User::getUserRole($userId);
         return $roleName;
     }
 
-    public static function getUserNameById($id){
+    public static function getUserNameById($id)
+    {
         $user = User::findOrFail($id);
         return $user;
     }

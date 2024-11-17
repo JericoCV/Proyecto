@@ -19,6 +19,13 @@ class CourseController extends Controller
         return view('courses.index', compact('courses'));
     }
 
+    public function show(Course $course)
+    {
+        $course = Course::with('teacher')->findOrFail($course->id); // Asume que hay una relación 'teacher' en el modelo Course
+        $archives = ArchiveController::getArchivesByCourseId($course->id);
+        return view('courses.show')->with(compact('course','archives'));
+    }
+
     // Muestra el formulario para crear un nuevo curso
     public function create()
     {

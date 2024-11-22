@@ -11,8 +11,15 @@
 
         <!-- Email Address -->
         <div class="mt-4">
-            <x-input-label for="email" :value="__('Email')" />
-            <x-text-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')" required autocomplete="username" />
+            <x-input-label for="email" :value="__('Usuario (se autocompletara el email institucional)')" />
+            <x-text-input 
+                id="email" 
+                class="block mt-1 w-full" 
+                type="text" 
+                name="email_input" 
+                :value="old('email') ? str_replace('@academy.com', '', old('email')) : ''" 
+                required 
+                autocomplete="username" />
             <x-input-error :messages="$errors->get('email')" class="mt-2" />
         </div>
 
@@ -57,4 +64,17 @@
             </x-primary-button>
         </div>
     </form>
+            
+    <script>
+        document.querySelector('form').addEventListener('submit', function (e) {
+            const emailField = document.getElementById('email');
+            const domain = "@academy.com";
+    
+            // Añadir el dominio antes de enviar el formulario
+            if (!emailField.value.includes(domain)) {
+                emailField.name = 'email'; // Cambia el nombre del campo para enviar el valor correcto
+                emailField.value = emailField.value.trim() + domain;
+            }
+        });
+    </script>
 </x-guest-layout>

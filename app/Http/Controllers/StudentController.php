@@ -28,7 +28,7 @@ class StudentController extends Controller
     // Muestra las actividades de un curso específico para el estudiante
     public function activities($course_id)
     {
-        $archives = ArchiveController::getArchivesByCourseIdForStudents($course_id);
+        $archives = ArchiveController::getArchivesByCourseId($course_id); 
         $course = Course::with([
             'activities' => function($query) {
                 $query->orderBy('created_at', 'desc');

@@ -32,6 +32,8 @@
                                                 type="number" 
                                                 name="grades[{{ $student->id }}][grade]" 
                                                 value="{{ $student->grades[0]->grade ?? '' }}" 
+                                                min="0" 
+                                                max="100" 
                                                 class="w-20 text-center border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
                                         </td>
                                         <td class="px-4 py-3">

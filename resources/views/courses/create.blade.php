@@ -42,6 +42,15 @@
                             </div>
     
                             <div>
+                                <label for="mode" class="block text-lg font-medium text-gray-700">Modalidad</label>
+                                <select name="mode" id="mode" class="mt-2 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 p-2" required>
+                                    <option value="virtual">Virtual</option>
+                                    <option value="presencial">Presencial</option>
+                                    <option value="hibrido">Híbrido</option>
+                                </select>
+                            </div>
+
+                            <div>
                                 <label for="teacher_id" class="block text-lg font-medium text-gray-700">Profesor</label>
                                 <select name="teacher_id" id="teacher_id" class="mt-2 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 p-2">
                                     @foreach($teachers as $teacher)

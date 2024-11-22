@@ -42,7 +42,7 @@ class ArchiveController extends Controller
 {
     // Validación del archivo PDF
     $validated = $request->validate([
-        'file' => 'required|mimes:pdf|max:2048', // Solo PDF y tamaño máximo de 2 MB
+        'file' => 'required|mimes:pdf|max:5120', // Solo PDF y tamaño máximo de 2 MB
         'name' => 'required|string|max:255',
     ]);
 

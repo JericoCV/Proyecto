@@ -42,6 +42,7 @@ class CourseController extends Controller
         $validatedData = $request->validate([
             'name' => 'required|string|max:255',
             'level' => 'required|string|max:50',
+            'mode' => 'required|string|max:50',
             'teacher_id' => 'required|exists:users,id',
         ]);
 
@@ -64,6 +65,7 @@ class CourseController extends Controller
     {
         $validatedData = $request->validate([
             'name' => 'required|string|max:255',
+            'mode' => 'required|string|max:50',
             'level' => 'required|string|max:50',
             'teacher_id' => 'required|exists:users,id',
         ]);

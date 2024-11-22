@@ -11,10 +11,19 @@
 
         <!-- Email Address -->
         <div>
-            <x-input-label for="email" :value="__('Correo Electrónico')" class="text-lg font-medium text-gray-700" />
-            <x-text-input id="email" class="block mt-2 w-full p-3 rounded-lg border border-gray-300 shadow-sm focus:ring-2 focus:ring-blue-500 focus:outline-none text-sm font-medium text-gray-700" type="email" name="email" :value="old('email')" required autocomplete="username" />
-            <x-input-error :messages="$errors->get('email')" class="mt-2 text-red-600" />
+            <x-input-label for="email" :value="__('Usuario (se autocompletara el email institucional)')" />
+            <x-text-input 
+                id="email" 
+                class="block mt-1 w-full" 
+                type="text" 
+                name="email_input" 
+                :value="old('email') ? str_replace('@academy.com', '', old('email')) : ''" 
+                required 
+                autocomplete="username" />
+            <x-input-error :messages="$errors->get('email')" class="mt-2" />
         </div>
+        
+        
 
         <!-- Password -->
         <div>
@@ -48,4 +57,16 @@
             </x-primary-button>
         </div>
     </form>
+    <script>
+        document.querySelector('form').addEventListener('submit', function (e) {
+            const emailField = document.getElementById('email');
+            const domain = "@academy.com";
+    
+            // Añadir el dominio antes de enviar el formulario
+            if (!emailField.value.includes(domain)) {
+                emailField.name = 'email'; // Cambia el nombre del campo para enviar el valor correcto
+                emailField.value = emailField.value.trim() + domain;
+            }
+        });
+    </script>
 </x-guest-layout>

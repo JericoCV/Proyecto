@@ -105,4 +105,8 @@ class PageController extends Controller
         // Redirigir a la lista de páginas con un mensaje de éxito
         return redirect()->route('pages.index')->with('success', 'Page deleted successfully.');
     }
+    public static function getPages(){
+        $links = Page::all();
+        return $links;
+    }
 }

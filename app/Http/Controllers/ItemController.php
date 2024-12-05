@@ -25,4 +25,9 @@ class ItemController extends Controller
 
         return redirect()->route('pages.menus.index', [$page_id, $menu_id])->with('success', 'Item deleted successfully!');
     }
+
+    public static function getItemsByMenuId($id){
+        $items = Item::where('menu_id',$id)->get();
+        return $items;
+    }
 }

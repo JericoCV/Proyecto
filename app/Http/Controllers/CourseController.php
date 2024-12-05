@@ -9,6 +9,7 @@ use App\Models\Student;
 use Illuminate\Http\Request;
 use App\Http\Controllers\ArchiveController;
 use App\Http\Controllers\ActivityController;
+use Illuminate\Support\Facades\DB;
 
 class CourseController extends Controller
 {
@@ -23,7 +24,7 @@ class CourseController extends Controller
     {
         $course = Course::with('teacher')->findOrFail($course->id); // Asume que hay una relación 'teacher' en el modelo Course
         $archives = ArchiveController::getArchivesByCourseId($course->id);
-        return view('courses.show')->with(compact('course','archives'));
+        return view('courses.show')->with(compact('course', 'archives'));
     }
 
     // Muestra el formulario para crear un nuevo curso
@@ -86,12 +87,30 @@ class CourseController extends Controller
     // Asigna estudiantes a un curso
     public function assignStudents($course_id)
     {
+        // Obtener el curso
         $course = Course::findOrFail($course_id);
-        $students = User::whereHas('role', function ($query) {
-            $query->whereIn('role_name', ['Estudiante']);
-        })->get();
-        return view('courses.assign-students', compact('course', 'students'));
+
+        // Obtener los IDs de los estudiantes ya asignados al curso
+        $assignedStudentIds = DB::table('students')
+            ->where('course_id', $course_id)
+            ->pluck('student_id');
+
+        // Obtener estudiantes con rol 'Estudiante' que NO están asignados al curso
+        $studentsNotAssigned = User::whereHas('role', function ($query) {
+            $query->where('role_name', 'Estudiante');
+        })->whereNotIn('id', $assignedStudentIds)
+            ->get();
+
+        // Obtener estudiantes que SÍ están asignados al curso
+        $studentsAssigned = User::whereHas('role', function ($query) {
+            $query->where('role_name', 'Estudiante');
+        })->whereIn('id', $assignedStudentIds)
+            ->get();
+
+        return view('courses.assign-students', compact('course', 'studentsNotAssigned', 'studentsAssigned'));
     }
+
+
 
     // Guarda los estudiantes asignados al curso
     public function storeAssignedStudents(Request $request, $course_id)
@@ -100,45 +119,58 @@ class CourseController extends Controller
         $studentIds = $request->input('students'); // Array de IDs de estudiantes seleccionados
 
         // Limpia los estudiantes actuales y asigna los nuevos
-        Student::where('course_id', $course_id)->delete();
         foreach ($studentIds as $studentId) {
             $name = UserController::getUserNameById($studentId);
             Student::create([
                 'name' => 'Estudiante',
-                'fullname'=> $name->name,
+                'fullname' => $name->name,
                 'student_id' => $studentId,
                 'course_id' => $course_id,
             ]);
         }
 
-        return redirect()->route('courses.index')->with('success', 'Estudiantes asignados correctamente al curso.');
+        return redirect()->route('courses.assignStudents', $course_id)->with('success', 'Estudiantes asignados correctamente al curso.');
+    }
+
+    public function removestudentfromCourse($course_id, $student_id)
+    {
+        // Limpia los estudiantes actuales y asigna los nuevos
+        Student::where('course_id', $course_id)->where('student_id', $student_id)->delete();
+        return redirect()->route('courses.assignStudents', $course_id)->with('success', 'Se ha eliminado al estudiante del curso');
     }
 
     public function myCourses()
     {
         // Obtener el usuario autenticado
         $user = Auth::user();
-    
+
         // Obtener los cursos que dicta el usuario actual (como profesor)
         $courses = Course::where('teacher_id', $user->id)->get();
-    
+
         return view('courses.my-courses', compact('courses'));
     }
 
-    public function myCourse($course_id){
-
+    public function myCourse($course_id)
+    {
         // Obtener el usuario autenticado
         $user = Auth::user();
-    
-        $course = Course::where('teacher_id',$user->id)->where('id',$course_id)->first();
+        $course = Course::with('activities')->where('teacher_id', $user->id)->where('id', $course_id)->first();
         $archives = ArchiveController::getArchivesByCourseId($course_id);
-        $activities = ActivityController::getActivitieByCoursId($course_id);
 
-        //  dd($course);
-        return view('courses.my-course')->with(compact('course','archives', 'activities'));
+        // Obtener los meses, asegurándose de que no haya valores vacíos
+        $months = $course->activities->pluck('month')
+            ->filter(function ($month) {
+                return !empty($month); // Filtra valores vacíos
+            })
+            ->unique()
+            ->values();
+
+        return view('courses.my-course')->with(compact('course', 'archives', 'months'));
     }
-     
-    public static function getCourseById($id){
+
+
+    public static function getCourseById($id)
+    {
         $course = Course::findOrFail($id);
         return $course;
     }

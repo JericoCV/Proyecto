@@ -70,5 +70,12 @@ class SectionController extends Controller
         }
         $section->delete();
     }
+
+    public static function getSectionAndElementsByPageId($id){
+        $section = Section::with(['elements' => function ($query) {
+            $query->orderBy('order', 'asc');
+        }])->where('page_id',$id)->get();
+        return $section;
+    }
 }
 

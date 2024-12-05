@@ -9,7 +9,7 @@ class Activity extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['name', 'course_id'];
+    protected $fillable = ['name', 'course_id', 'month'];
 
     // Una actividad pertenece a un curso
     public function course()

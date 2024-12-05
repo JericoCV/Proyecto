@@ -28,9 +28,11 @@
                     </x-slot>
 
                     <x-slot name="content">
+                        @if(Auth::user()->role_id == 1)
                         <x-dropdown-link :href="route('profile.edit')" class="text-blue-800 hover:bg-blue-100">
                             {{ __('Profile') }}
                         </x-dropdown-link>
+                        @endif
                         <x-dropdown-link :href="route('dashboard')" class="text-blue-800 hover:bg-blue-100">
                             {{ __('Dashboard') }}
                         </x-dropdown-link>

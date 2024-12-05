@@ -62,44 +62,48 @@
                     <div class="mb-6">
                         <a href="{{ route('activities.create', $course->id) }}" 
                            class="px-4 py-2 bg-green-600 text-white text-sm font-medium rounded-md shadow hover:bg-green-700">
-                            Crear Nueva Actividad
+                            Crear Actividades Mensuales
                         </a>
                     </div>
                     <div class="overflow-x-auto">
                         <table class="min-w-full border-collapse border border-gray-200">
                             <thead class="bg-gray-100">
                                 <tr>
-                                    <th class="py-3 px-4 text-left border border-gray-200">Actividad</th>
+                                    <th class="py-3 px-4 text-left border border-gray-200">Mes</th>
                                     <th class="py-3 px-4 text-center border border-gray-200">Opciones</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach ($activities as $activity)
+                                
+                                @foreach ($months as $month)
+                                    @if($month != "")
                                     <tr class="hover:bg-gray-50">
                                         <td class="py-3 px-4 border">
-                                            <a href="{{ route('activities.grades.show', [$course->id, $activity->id]) }}" 
+                                            <a href="{{ route('activities.grades.show', [$course->id, $month]) }}" 
                                                class="text-blue-600 hover:underline">
-                                                {{ $activity->name }}
+                                                {{ $month }} - Registro de Notas
                                             </a>
                                         </td>
                                         <td class="py-3 px-4 border text-center">
-                                            <a href="{{ route('activities.edit', [$course->id, $activity->id]) }}" 
-                                               class="text-yellow-600 hover:underline">
-                                                Editar
-                                            </a> |
-                                            <form action="{{ route('activities.destroy', [$course->id, $activity->id]) }}" method="POST" style="display: inline;" onsubmit="return confirm('¿Estás seguro de eliminar esta actividad?')">
+                                            <a href="{{ route('activities.grades.pdfshow', [$course->id, $month]) }}" 
+                                                class="text-blue-600 hover:underline">
+                                                 {{ $month }} - Notas a PDF
+                                             </a><br>
+                                            <form action="{{ route('activities.destroy', [$course->id, $month]) }}" method="POST" style="display: inline;" onsubmit="return confirm('¿Estás seguro de eliminar esta actividad?')">
                                                 @csrf
                                                 @method('DELETE')
                                                 <button type="submit" 
-                                                        class="text-red-600 hover:underline">
-                                                    Eliminar
+                                                        class="text-red-600 hover:underline" onclick="return confirm('¿Estás seguro de eliminar las actividades de {{$month}}?')">
+                                                    Eliminar Actividades del Mes
                                                 </button>
                                             </form>
                                         </td>
                                     </tr>
+                                    @endif
                                 @endforeach
                             </tbody>
                         </table>
+                        
                     </div>
                 </div>
             </div>

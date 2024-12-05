@@ -1,15 +1,7 @@
-/* Reset básico */
-body, html {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: Arial, sans-serif;
-}
 
-h1, h2, h3, p {
-    margin: 0;
+body{
+    background-color: #a8c2fa;
 }
-
 /* Carrusel */
 .carousel {
     position: relative;
@@ -168,4 +160,95 @@ h1, h2, h3, p {
     text-align: center;
     margin-top: 1rem;
     font-size: 0.9rem;
+}
+/* Layout general */
+.page-content {
+    width: 80%;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+/* Estilo para las secciones */
+.section {
+    padding-top: 80px;
+    margin-bottom: 40px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 20px;
+    background-color: #f9f9f9;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.section-title {
+    font-size: 1.5rem;
+    margin-bottom: 15px;
+    color: #333;
+    text-align: left;
+}
+
+/* Estilo para los elementos */
+.section-elements {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.element-text {
+    font-size: 1rem;
+    color: #555;
+    text-align: justify;
+}
+
+.element-image {
+    max-width: 80%;
+    display: flex;
+    height: auto;
+    margin: auto;
+    border-radius: 8px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+}
+.fixed-menu {
+    position: fixed;
+    top: 10px; /* Ajusta según el espacio deseado */
+    padding: 15px;
+    background-color: rgba(255, 255, 255, 0.9);
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    z-index: 1000;
+}
+
+.fixed-menu h3 {
+    font-size: 1.2rem;
+    margin-bottom: 10px;
+    color: #333;
+}
+
+.fixed-menu ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.fixed-menu li {
+    margin-bottom: 8px;
+}
+
+.fixed-menu a {
+    text-decoration: none;
+    color: #2563EB;
+    font-weight: bold;
+}
+
+.fixed-menu a:hover {
+    color: #EF4444;
+}
+
+/* Posicionamiento */
+.fixed-menu.top-left {
+    left: 10px;
+}
+
+.fixed-menu.top-right {
+    right: 10px;
 }

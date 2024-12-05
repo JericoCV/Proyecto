@@ -19,9 +19,9 @@ class ArchiveController extends Controller
         $role = UserController::getUserRole($user->id);
         if ($role === 'Estudiante') {
             $archives = Archive::where('course_id', $course_id)
-                                ->where('approved', true)
-                                ->get();
-        } elseif ($role === 'Administrator'|| $role === 'Docente') {
+                ->where('approved', true)
+                ->get();
+        } elseif ($role === 'Administrator' || $role === 'Docente') {
             // El administrador ve todos los archivos, incluidos los no aprobados
             $archives = Archive::where('course_id', $course_id)->get();
         } else {
@@ -39,49 +39,53 @@ class ArchiveController extends Controller
 
     // Almacena un archivo PDF subido
     public function store(Request $request, $course_id)
-{
-    // Validación del archivo PDF
-    $validated = $request->validate([
-        'file' => 'required|mimes:pdf|max:5120', // Solo PDF y tamaño máximo de 2 MB
-        'name' => 'required|string|max:255',
-    ]);
-
-    // Obtener usuario y determinar carpeta de almacenamiento según el rol
-    $user = Auth::user();
-    $role = UserController::getUserRole($user->id);
-    $path = null;
-    if ($role === 'Docente') {
-        $path = "courses/$course_id/teachers";
-    } elseif ($role === 'Administrator') {
-        $path = "courses/$course_id/administrators";
-    }
-
-    // Subir archivo PDF al disco 'public'
-    $filePath = $request->file('file')->store($path, 'public');
-
-    // Crear el registro del archivo en la base de datos
-    $archive = Archive::create([
-        'name' => $validated['name'],
-        'path' => $filePath,
-        'mail' => $user->email,
-        'upload_date' => now(),
-        'course_id' => $course_id,
-        'approved' => $role === 'Administrator' ? true : false, // Se aprueba automáticamente si lo sube un administrador
-    ]);
-
-    // Crear un registro de moderación si el archivo no está aprobado
-    if (!$archive->approved) {
-        Moderation::create([
-            'archive_id' => $archive->id,
-            'state' => 'pending',
-            'administrator_id' => null, // Administrador aún no asignado
+    {
+        // Validación del archivo PDF
+        $validated = $request->validate([
+            'file' => 'required|mimes:pdf|max:5120', // Solo PDF y tamaño máximo de 2 MB
+            'name' => 'required|string|max:255',
         ]);
+
+        // Obtener usuario y determinar carpeta de almacenamiento según el rol
+        $user = Auth::user();
+        $role = UserController::getUserRole($user->id);
+        $path = null;
+        if ($role === 'Docente') {
+            $path = "courses/$course_id/teachers";
+        } elseif ($role === 'Administrator') {
+            $path = "courses/$course_id/administrators";
+        }
+
+        // Subir archivo PDF al disco 'public'
+        $filePath = $request->file('file')->store($path, 'public');
+
+        // Crear el registro del archivo en la base de datos
+        $archive = Archive::create([
+            'name' => $validated['name'],
+            'path' => $filePath,
+            'mail' => $user->email,
+            'upload_date' => now(),
+            'course_id' => $course_id,
+            'approved' => $role === 'Administrator' ? true : false, // Se aprueba automáticamente si lo sube un administrador
+        ]);
+
+        // Crear un registro de moderación si el archivo no está aprobado
+        if (!$archive->approved) {
+            Moderation::create([
+                'archive_id' => $archive->id,
+                'state' => 'pending',
+                'administrator_id' => null, // Administrador aún no asignado
+            ]);
+        }
+
+        if (Auth::user()->role_id == 2) {
+            return redirect()->route('courses.myCourse', $course_id)
+                ->with('success', '¡Archivo subido exitosamente!', compact('course'));
+        } else {
+            return redirect()->route('courses.archives.index', $course_id)
+                ->with('success', '¡Archivo subido exitosamente!', compact('course'));
+        }
     }
-
-    return redirect()->route('courses.archives.index', $course_id)
-                     ->with('success', '¡Archivo subido exitosamente!');
-}
-
     // Elimina un archivo
     public function destroy($course_id, $id)
     {
@@ -95,20 +99,24 @@ class ArchiveController extends Controller
         // Eliminar el registro de la base de datos
         $archive->delete();
 
-        return redirect()->route('courses.archives.index', $course_id)
-                         ->with('success', 'Archivo eliminado correctamente!');
+        if (Auth::user()->role_id == 2) {
+            return redirect()->route('courses.myCourse', $course_id)
+                ->with('success', 'Archivo eliminado correctamente!');
+        } else {
+            return redirect()->route('courses.archives.index', $course_id)
+                ->with('success', 'Archivo eliminado correctamente!');
+        }
     }
 
-    public static function getArchivesByCourseId($course_id){
+    public static function getArchivesByCourseId($course_id)
+    {
         $archives = Archive::where('course_id', $course_id)->get();
         return $archives;
     }
 
-    public static function getArchivesByCourseIdForStudents($course_id){
+    public static function getArchivesByCourseIdForStudents($course_id)
+    {
         $archives = Archive::where('course_id', $course_id)->where('approved', true)->get();
         return $archives;
     }
-
-
-    
 }

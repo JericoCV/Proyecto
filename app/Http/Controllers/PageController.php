@@ -109,4 +109,12 @@ class PageController extends Controller
         $links = Page::all();
         return $links;
     }
+
+    public function showPage(Page $page)
+{
+    $menu = MenuController::getMenuAndElementsByPageId($page->id);
+    $sections = SectionController::getSectionAndElementsByPageId($page->id);
+    return view('page')->with(compact('menu','sections','page'));
+}
+
 }

@@ -9,7 +9,7 @@ class Course extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['name', 'level', 'teacher_id'];
+    protected $fillable = ['name', 'level', 'mode', 'teacher_id'];
 
     // Un curso pertenece a un maestro
     public function teacher()

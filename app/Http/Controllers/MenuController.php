@@ -96,4 +96,11 @@ class MenuController extends Controller
 
         return redirect()->route('pages.menus.index',$page_id)->with('success', 'Menu deleted successfully!');
     }
+
+    public static function getMenuAndElementsByPageId($id){
+        $menu = Menu::with(['items' => function ($query) {
+            $query->orderBy('order', 'asc');
+        }])->where('page_id',$id)->first();
+        return $menu;
+    }
 }

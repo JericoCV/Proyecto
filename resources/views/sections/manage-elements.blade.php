@@ -19,8 +19,15 @@
                                 <div>
                                     <strong>Tipo:</strong> {{ ucfirst($element->type) }} |
                                     <strong>Orden:</strong> {{ $element->order }} |
-                                    <strong>URL:</strong> {{ $element->image_path }}
+                                    @if(strtolower($element->type) == 'text')
+                                    <strong>Texto:</strong> {{$element->content}}
+                                    @else
+                                    <strong>URL:</strong> <a href="{{ asset('storage/' . $element->image_path) }}" target="_blank">Image</a>
+                                    @endif
                                 </div>
+                                <a href="{{ route('pages.sections.elements.edit', [$page_id, $section_id,$element->id]) }}"
+                                    class="inline-block mt-4 py-2 px-4 bg-blue-500 text-white font-semibold rounded-lg shadow-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400">Add
+                                    Editar</a>
                                 <form
                                     action="{{ route('pages.sections.elements.destroy', [$page_id, $section_id, $element->id]) }}"
                                     method="POST" style="display:inline-block;">
@@ -35,8 +42,7 @@
                     </ul>
 
                     <a href="{{ route('pages.sections.elements.create', [$page_id, $section_id]) }}"
-                        class="inline-block mt-4 py-2 px-4 bg-blue-500 text-white font-semibold rounded-lg shadow-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400">Add
-                        Añadir</a>
+                        class="inline-block mt-4 py-2 px-4 bg-blue-500 text-white font-semibold rounded-lg shadow-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400">Añadir</a>
                     <a href="{{ route('pages.sections.index', [$page_id, $section_id]) }}"
                         class="inline-block mt-4 ml-4 py-2 px-4 bg-gray-300 text-gray-700 font-semibold rounded-lg shadow-md hover:bg-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-300">Volver
                         a Secciones</a>
@@ -93,26 +99,47 @@ function updateElementOrder() {
 // Función para actualizar la tabla con los nuevos elementos ordenados
 function updateTable(elements) {
     let tableBody = document.querySelector('#sortable-elements');
-    tableBody.innerHTML = ''; // Limpiar la tabla antes de actualizar
+    tableBody.innerHTML = ''; // Limpiar la lista antes de actualizar
 
-    // Agregar los elementos ordenados a la tabla
+    // Iterar sobre los elementos y construir el HTML dinámicamente
     elements.forEach(element => {
+        let contentHtml = '';
+
+        // Generar contenido dependiendo del tipo
+        if (element.type.toLowerCase() === 'text') {
+            contentHtml = `<strong>Texto:</strong> ${element.content}`;
+        } else if (element.type.toLowerCase() === 'image') {
+            contentHtml = `
+                <strong>URL:</strong> 
+                <a href="/storage/${element.image_path}" target="_blank">Imagen</a>
+            `;
+        }
+
+        // Generar el HTML del elemento
         let itemHtml = `
             <li class="sortable-item p-4 border border-gray-300 rounded-lg shadow-sm hover:bg-gray-50" data-id="${element.id}">
                 <div class="flex justify-between items-center">
                     <div>
-                        <strong>Type:</strong> ${element.type} | 
-                        <strong>Order:</strong> ${element.order} |
-                        <strong>URL:</strong> ${element.image_path}
+                        <strong>Tipo:</strong> ${element.type.charAt(0).toUpperCase() + element.type.slice(1)} |
+                        <strong>Orden:</strong> ${element.order} | 
+                        ${contentHtml}
                     </div>
+                    <a href="/pages/sections/${sectionId}/elements/${element.id}/edit"
+                        class="inline-block mt-4 py-2 px-4 bg-blue-500 text-white font-semibold rounded-lg shadow-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400">
+                        Editar
+                    </a>
                     <form action="/pages/sections/${sectionId}/elements/${element.id}/destroy" method="POST" style="display:inline-block;">
                         @csrf
                         @method('DELETE')
-                        <button type="submit" class="ml-4 text-white bg-red-600 hover:bg-red-500 rounded px-3 py-1 focus:outline-none focus:ring-2 focus:ring-red-400">Delete</button>
+                        <button type="submit" class="ml-4 text-white bg-red-600 hover:bg-red-500 rounded px-3 py-1 focus:outline-none focus:ring-2 focus:ring-red-400">
+                            Eliminar
+                        </button>
                     </form>
                 </div>
             </li>
         `;
+
+        // Insertar el HTML del elemento en la lista
         tableBody.insertAdjacentHTML('beforeend', itemHtml);
     });
 }

@@ -66,9 +66,9 @@
                             Nueva Sección
                         </a>
                         <!-- Botón Volver a Páginas -->
-                        <a href="{{ route('pages.index') }}" 
+                        <a href="{{ route('pages.show', $page_id) }}" 
                             class="px-4 py-2 bg-gray-300 text-gray-700 font-semibold rounded-lg shadow-md hover:bg-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-300">
-                            Volver a Páginas
+                            Atras
                         </a>
                     </div>
     

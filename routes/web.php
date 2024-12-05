@@ -62,6 +62,7 @@ Route::middleware(['auth', AdminMiddleware::class])->group(function () {
     Route::resource('courses', CourseController::class);
     Route::get('courses/{course}/assign-students', [CourseController::class, 'assignStudents'])->name('courses.assignStudents');
     Route::post('courses/{course}/store-assigned-students', [CourseController::class, 'storeAssignedStudents'])->name('courses.storeAssignedStudents');
+    Route::post('courses/{course}/delete-assigned-student/{student}', [CourseController::class, 'removestudentfromCourse'])->name('courses.removeAssignedStudent');
     Route::get('/moderations', [ModerationController::class, 'index'])->name('moderations.index');
     Route::get('/moderations/{id}', [ModerationController::class, 'show'])->name('moderations.show');
     Route::put('/moderations/{id}', [ModerationController::class, 'update'])->name('moderations.update');
@@ -92,9 +93,13 @@ Route::middleware(['auth', TeacherMiddleware::class])->group(function () {
     Route::post('/courses/{course}/activities', [ActivityController::class, 'store'])->name('activities.store');
     Route::get('/courses/{course}/activities/{activity}/edit', [ActivityController::class, 'edit'])->name('activities.edit');
     Route::put('/courses/{course}/activities/{activity}', [ActivityController::class, 'update'])->name('activities.update');
-    Route::delete('/courses/{course}/activities/{activity}', [ActivityController::class, 'destroy'])->name('activities.destroy');
-    Route::get('/courses/{course}/activities/{activity}/grades', [GradeController::class, 'show'])->name('activities.grades.show');
-    Route::post('/courses/{course}/activities/{activity}/grades', [GradeController::class, 'update'])->name('grades.update');
+    Route::delete('/courses/{course}/activities/{month}', [ActivityController::class, 'destroy'])->name('activities.destroy');
+    Route::get('/courses/{course}/activities/{month}/grades', [GradeController::class, 'show'])->name('activities.grades.show');
+    Route::get('/courses/{course}/activities/{month}/gradestopdf', [GradeController::class, 'grades_show'])->name('activities.grades.pdfshow');
+    Route::post('/courses/{course}/students/{student}/generate-pdf', [GradeController::class, 'generatePdfForStudent'])->name('grades.generatePdfForStudent');
+
+
+    Route::put('/courses/{course}/activities/{month}/grades', [GradeController::class, 'update'])->name('grades.update');
 });
 
 /*Student route*/
@@ -124,3 +129,4 @@ Route::middleware(['auth'])->group(function () {
 /********************PUBLIC ROUTES*******************/
 
 Route::get('/', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+Route::get('/{page}/show', [PageController::class, 'showPage'])->name('view.page');

@@ -24,6 +24,6 @@ class HomeController extends Controller
     public function index()
     {
         $links = PageController::getPages();
-        return view('welcome')->with(compact('links'));
+        return view('index')->with(compact('links'));
     }
 }

@@ -10,6 +10,11 @@
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 text-gray-900">
                     <div class="container">
+
+                        <a href="{{ route('pages.show', $page->id) }}"
+                            class="inline-block bg-blue-500 text-white px-4 py-2 rounded-lg shadow-sm hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-50 transition duration-200 mr-2">
+                            Atras
+                        </a>
                         <h1 class="text-2xl font-semibold text-blue-700 mb-4">Menu: {{ $menu[0]->name }}</h1>
     
                         <div class="mb-6 flex space-x-4">

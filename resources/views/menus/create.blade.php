@@ -22,8 +22,8 @@
                             <div class="form-group">
                                 <label for="position">Position:</label>
                                 <select name="position" id="position" class="form-control" required>
-                                    <option value="0" selected="selected">Left</option>
-                                    <option value="1">Right</option>
+                                    <option value="top-left" selected="selected">Left</option>
+                                    <option value="top-right">Right</option>
                                 </select>
                             </div>
     

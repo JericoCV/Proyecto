@@ -9,13 +9,18 @@
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white shadow-md rounded-lg overflow-hidden">
                 <div class="p-6 text-gray-900">
+                    <a href="{{ route('student.courses') }}" 
+                       class="px-4 py-2 my-2 bg-blue-600 text-white font-semibold text-sm rounded-md shadow hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                        Volver a tus Cursos
+                    </a>
                     <!-- Actividades del Curso -->
-                    <h3 class="text-2xl font-bold mb-6">Actividades para {{ $course->name }}</h3>
+                    <h3 class="text-2xl font-bold mt-2 mb-6">Actividades para {{ $course->name }}</h3>
                     
                     <table class="table-auto w-full bg-white border rounded-lg overflow-hidden">
                         <thead class="bg-blue-500 text-white">
                             <tr>
                                 <th class="py-3 px-4 text-left">Actividad</th>
+                                <th class="py-3 px-4 text-left">Mes</th>
                                 <th class="py-3 px-4 text-left">Nota</th>
                                 <th class="py-3 px-4 text-left">Comentario</th>
                             </tr>
@@ -24,6 +29,7 @@
                             @forelse ($course->activities as $activity)
                                 <tr class="border-b hover:bg-blue-50">
                                     <td class="py-2 px-4">{{ $activity->name }}</td>
+                                    <td class="py-2 px-4">{{ $activity->month }}</td>
                                     <td class="py-2 px-4">
                                         {{ $activity->grades[0]->grade ?? 'Sin nota' }}
                                     </td>
